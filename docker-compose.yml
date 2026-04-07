@@ -1,0 +1,175 @@
+version: '3.9'
+
+x-airflow-env: &airflow-env
+  AIRFLOW__CORE__EXECUTOR: LocalExecutor
+  AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+  AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY}
+  AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY}
+  AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+  AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+
+services:
+
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./seed/data:/seed:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    profiles: [core, full]
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    restart: unless-stopped
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    ports:
+      - "9092:9092"
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 15
+    profiles: [core, full]
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    restart: unless-stopped
+    environment:
+      KAFKA_CLUSTERS_0_NAME: shopstream
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    ports:
+      - "8080:8080"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    profiles: [core, full]
+
+  clickstream-gen:
+    build: ./scripts/clickstream-gen
+    restart: unless-stopped
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      KAFKA_TOPIC: ${KAFKA_TOPIC_CLICKSTREAM}
+      EVENTS_PER_SECOND: ${CLICKSTREAM_EVENTS_PER_SEC}
+    depends_on:
+      kafka:
+        condition: service_healthy
+    profiles: [core, full]
+
+  spark:
+    build: ./infra/spark
+    restart: unless-stopped
+    environment:
+      SPARK_MODE: master
+      WAREHOUSE_PATH: ${SPARK_WAREHOUSE}
+      ICEBERG_CATALOG_TYPE: ${ICEBERG_CATALOG_TYPE}
+    volumes:
+      - spark_warehouse:/warehouse
+      - ./ingestion:/opt/spark/work-dir/ingestion
+      - ./dbt:/opt/spark/work-dir/dbt
+      - ./seed/data:/opt/spark/work-dir/seed/data
+    ports:
+      - "4040:4040"
+      - "7077:7077"
+    profiles: [core, full]
+
+  airflow:
+    build: ./infra/airflow
+    restart: unless-stopped
+    command: standalone
+    environment:
+      <<: *airflow-env
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI}
+      SPARK_WAREHOUSE: ${SPARK_WAREHOUSE}
+    volumes:
+      - ./ingestion/dags:/opt/airflow/dags
+      - ./ingestion/connectors:/opt/airflow/connectors
+      - ./ingestion/streaming:/opt/airflow/streaming
+      - ./ml:/opt/airflow/ml
+      - ./dbt:/opt/airflow/dbt
+      - ./seed/data:/opt/airflow/seed/data
+      - airflow_logs:/opt/airflow/logs
+    ports:
+      - "8082:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: [core, full]
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.12.2
+    restart: unless-stopped
+    command: >
+      mlflow server
+      --backend-store-uri postgresql://mlflow:mlflow@postgres:5432/mlflow
+      --default-artifact-root /mlflow/artifacts
+      --host 0.0.0.0
+      --port 5000
+    volumes:
+      - mlflow_artifacts:/mlflow/artifacts
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: [core, full]
+
+  fastapi:
+    build: ./serving
+    restart: unless-stopped
+    environment:
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    ports:
+      - "8001:8001"
+    depends_on:
+      - mlflow
+      - postgres
+    profiles: [core, full]
+
+  ui:
+    build: ./ui
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_PROFILE: core
+      NEXT_PUBLIC_API_URL: http://localhost:8001
+    ports:
+      - "3000:3000"
+    profiles: [core, full]
+
+volumes:
+  postgres_data:
+  kafka_data:
+  spark_warehouse:
+  airflow_logs:
+  mlflow_artifacts:
