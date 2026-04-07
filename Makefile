@@ -1,3 +1,9 @@
+# Load .env if it exists
+ifneq (,$(wildcard .env))
+  include .env
+  export
+endif
+
 .PHONY: up up-full down seed logs ps build clean setup help
 
 ## Start core services (~8GB RAM)
@@ -39,6 +45,7 @@ clean:
 setup:
 	bash scripts/setup.sh
 
-## Show help
+## Show this help
 help:
-	@grep -E '^##' Makefile | sed 's/## //'
+	@grep -E '^## |^[a-zA-Z_-]+:' Makefile | \
+	  awk '/^## /{desc=$$0; next} /^[a-zA-Z_-]+:/{gsub(/:$$/,"",$$1); printf "  %-12s %s\n", $$1, substr(desc,4)}'

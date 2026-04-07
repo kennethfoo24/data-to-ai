@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # DataFabric one-shot setup
 # Usage: bash scripts/setup.sh [core|full]
-set -e
+set -euo pipefail
+cd "$(dirname "$0")/.."
 
 PROFILE=${1:-core}
 
@@ -55,9 +56,17 @@ echo " ready."
 
 # 6. Wait for Airflow
 echo "→ Waiting for Airflow (up to 90s on first boot)..."
+WAIT=0
 until curl -sf http://localhost:8082/health 2>/dev/null | grep -q "healthy"; do
+  if [ $WAIT -ge 90 ]; then
+    echo ""
+    echo "ERROR: Airflow did not become healthy within 90s."
+    echo "Run 'make logs' to check what went wrong."
+    exit 1
+  fi
   printf '.'
   sleep 5
+  WAIT=$((WAIT + 5))
 done
 echo " ready."
 
