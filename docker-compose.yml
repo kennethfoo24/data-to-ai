@@ -126,7 +126,7 @@ services:
     profiles: [core, full]
 
   mlflow:
-    image: ghcr.io/mlflow/mlflow:v2.12.2
+    build: ./infra/mlflow
     restart: unless-stopped
     command: >
       mlflow server
