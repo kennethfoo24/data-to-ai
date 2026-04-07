@@ -84,8 +84,8 @@ services:
   spark:
     build: ./infra/spark
     restart: unless-stopped
+    command: /bin/bash -c "tail -f /dev/null"
     environment:
-      SPARK_MODE: master
       WAREHOUSE_PATH: ${SPARK_WAREHOUSE}
       ICEBERG_CATALOG_TYPE: ${ICEBERG_CATALOG_TYPE}
     volumes:
@@ -95,7 +95,6 @@ services:
       - ./seed/data:/opt/spark/work-dir/seed/data
     ports:
       - "4040:4040"
-      - "7077:7077"
     profiles: [core, full]
 
   airflow:
