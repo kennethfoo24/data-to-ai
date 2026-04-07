@@ -11,7 +11,7 @@ USER airflow
 RUN pip install --no-cache-dir \
   airbyte==0.14.0 \
   dbt-spark[PyHive]==1.8.0 \
-  apache-spark==3.5.1 \
+  pyspark==3.5.1 \
   pyarrow==15.0.2 \
   pandas==2.1.4 \
   torch==2.2.2 \
