@@ -10,7 +10,7 @@ RUN wget -q -O /opt/spark/jars/iceberg-spark-runtime.jar \
 # Python deps for PySpark jobs
 RUN pip3 install --no-cache-dir \
   pyarrow==15.0.2 \
-  pandas==2.1.4 \
+  pandas==2.0.3 \
   psycopg2-binary==2.9.9
 
 COPY spark-defaults.conf /opt/spark/conf/spark-defaults.conf

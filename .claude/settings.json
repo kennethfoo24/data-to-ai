@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod *)",
+      "Bash(docker *)",
+      "Bash(docker compose *)",
+      "Bash(docker-compose *)",
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(git *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(echo *)",
+      "Read",
+      "Edit"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(sudo rm *)",
+      "Read(./.env*)"
+    ]
+  }
+}
