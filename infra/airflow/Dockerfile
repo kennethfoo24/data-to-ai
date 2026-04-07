@@ -8,14 +8,11 @@ RUN apt-get update && \
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
 USER airflow
+# Install only orchestration-layer deps — no strict version pins to avoid
+# conflicts with Airflow's own constraints. ML packages (torch, mlflow, etc.)
+# live in the serving container and are added in Phase 3.
 RUN pip install --no-cache-dir \
-  airbyte==0.14.0 \
-  dbt-spark[PyHive]==1.8.0 \
-  pyspark==3.5.1 \
-  pyarrow==15.0.2 \
-  pandas==2.1.4 \
-  torch==2.2.2 \
-  mlflow==2.12.2 \
-  scikit-learn==1.4.2 \
-  psycopg2-binary==2.9.9 \
-  confluent-kafka==2.4.0
+  airbyte \
+  dbt-spark[PyHive] \
+  psycopg2-binary \
+  confluent-kafka
