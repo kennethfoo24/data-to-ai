@@ -72,7 +72,7 @@ make clean      # Stop + remove volumes + delete seed data
 |---|---|---|
 | **Lineage UI** | http://localhost:3000 | — |
 | **Airflow** | http://localhost:8082 | admin / admin |
-| **MLflow** | http://localhost:5000 | — |
+| **MLflow** | http://localhost:5001 | — |
 | **FastAPI docs** | http://localhost:8001/docs | — |
 | **Kafka UI** | http://localhost:8080 | — |
 | **Spark UI** | http://localhost:4040 | — |
