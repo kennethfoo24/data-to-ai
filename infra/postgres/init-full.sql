@@ -1,0 +1,11 @@
+CREATE DATABASE metastore;
+CREATE DATABASE airbyte;
+
+CREATE USER airbyte WITH PASSWORD 'airbyte';
+GRANT ALL PRIVILEGES ON DATABASE airbyte TO airbyte;
+ALTER DATABASE airbyte OWNER TO airbyte;
+
+CREATE USER temporal WITH PASSWORD 'temporal';
+CREATE DATABASE temporal;
+GRANT ALL PRIVILEGES ON DATABASE temporal TO temporal;
+ALTER DATABASE temporal OWNER TO temporal;

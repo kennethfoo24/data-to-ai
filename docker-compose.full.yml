@@ -1,0 +1,133 @@
+version: '3.9'
+
+# Usage: docker compose -f docker-compose.yml -f docker-compose.full.yml --profile full up
+
+services:
+
+  # --- Add metastore database to postgres init ---
+  postgres:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./infra/postgres/init-full.sql:/docker-entrypoint-initdb.d/02-init-full.sql:ro
+    profiles: [full]
+
+  hive-metastore:
+    build: ./infra/hive-metastore
+    restart: unless-stopped
+    ports:
+      - "9083:9083"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    profiles: [full]
+
+  minio:
+    image: minio/minio:RELEASE.2024-04-06T05-26-02Z
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    profiles: [full]
+
+  minio-init:
+    image: minio/mc:latest
+    entrypoint: /bin/sh /init-buckets.sh
+    volumes:
+      - ./infra/minio/init-buckets.sh:/init-buckets.sh:ro
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    depends_on:
+      - minio
+    profiles: [full]
+
+  airbyte-server:
+    image: airbyte/server:0.63.14
+    restart: unless-stopped
+    environment:
+      AIRBYTE_VERSION: 0.63.14
+      DATABASE_URL: jdbc:postgresql://postgres:5432/airbyte
+      DATABASE_USER: airbyte
+      DATABASE_PASSWORD: airbyte
+      TRACKING_STRATEGY: logging
+      WORKER_ENVIRONMENT: docker
+    ports:
+      - "8000:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: [full]
+
+  airbyte-worker:
+    image: airbyte/worker:0.63.14
+    restart: unless-stopped
+    environment:
+      AIRBYTE_VERSION: 0.63.14
+      DATABASE_URL: jdbc:postgresql://postgres:5432/airbyte
+      DATABASE_USER: airbyte
+      DATABASE_PASSWORD: airbyte
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - airbyte-server
+    profiles: [full]
+
+  airbyte-temporal:
+    image: temporalio/auto-setup:1.22.4
+    restart: unless-stopped
+    environment:
+      DB: postgresql
+      DB_PORT: 5432
+      POSTGRES_USER: temporal
+      POSTGRES_PWD: temporal
+      POSTGRES_SEEDS: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: [full]
+
+  airbyte-webapp:
+    image: airbyte/webapp:0.63.14
+    restart: unless-stopped
+    environment:
+      INTERNAL_API_HOST: airbyte-server:8001
+    ports:
+      - "8000:80"
+    depends_on:
+      - airbyte-server
+    profiles: [full]
+
+  pgadmin:
+    image: dpage/pgadmin4:8.5
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@shopstream.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: [full]
+
+  # Override ui to set full profile env
+  ui:
+    environment:
+      NEXT_PUBLIC_PROFILE: full
+      NEXT_PUBLIC_API_URL: http://localhost:8001
+    profiles: [full]
+
+volumes:
+  minio_data:
+  pgadmin_data:
