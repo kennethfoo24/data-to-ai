@@ -1,0 +1,18 @@
+shopstream:
+  target: dev
+  outputs:
+    dev:
+      type: spark
+      method: session
+      schema: default
+      host: localhost
+      connect_timeout: 60
+      connect_retries: 3
+      server_side_parameters:
+        "spark.driver.memory": "2g"
+        "spark.jars": "/opt/airflow/iceberg-spark-runtime.jar"
+        "spark.sql.extensions": "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions"
+        "spark.sql.catalog.local": "org.apache.iceberg.spark.SparkCatalog"
+        "spark.sql.catalog.local.type": "hadoop"
+        "spark.sql.catalog.local.warehouse": "/warehouse"
+        "spark.sql.defaultCatalog": "local"

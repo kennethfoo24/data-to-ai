@@ -1,0 +1,22 @@
+name: shopstream
+version: '1.0.0'
+config-version: 2
+
+profile: shopstream
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  shopstream:
+    silver:
+      +materialized: table
+      +file_format: iceberg
+      +schema: silver
+    gold:
+      +materialized: table
+      +file_format: iceberg
+      +schema: gold

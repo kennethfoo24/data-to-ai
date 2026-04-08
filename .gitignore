@@ -8,3 +8,16 @@ node_modules/
 mlruns/
 *.egg-info/
 .superpowers/
+.DS_Store
+
+# dbt runtime artifacts
+dbt/target/
+dbt/logs/
+dbt/metastore_db/
+dbt/derby.log
+dbt/.user.yml
+
+# Skills/agents (local tooling, not project code)
+.agents/
+.claude/
+skills-lock.json

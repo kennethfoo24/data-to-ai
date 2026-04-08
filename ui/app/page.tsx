@@ -1,10 +1,192 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+import MetricsBar from '@/components/MetricsBar'
+
+const LineageGraph = dynamic(() => import('@/components/LineageGraph'), {
+  ssr: false,
+  loading: () => (
+    <div style={{
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 14,
+    }}>
+      {/* Animated loading dots */}
+      <div style={{ display: 'flex', gap: 6 }}>
+        {[0, 1, 2].map(i => (
+          <div
+            key={i}
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              background: 'rgba(79,70,229,0.3)',
+              animation: `pulse-dot ${1 + i * 0.15}s ease-in-out infinite`,
+              animationDelay: `${i * 0.18}s`,
+            }}
+          />
+        ))}
+      </div>
+      <span style={{
+        fontFamily: 'var(--font-mono)',
+        fontSize: 10,
+        letterSpacing: '0.16em',
+        color: 'var(--ink-ghost)',
+        textTransform: 'uppercase',
+      }}>
+        Loading graph
+      </span>
+    </div>
+  ),
+})
+
 export default function Home() {
   return (
-    <main style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-      <div style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800 }}>DataFabric</h1>
-        <p style={{ color: '#6b7280', marginTop: '8px' }}>Lineage UI — Phase 5 coming soon</p>
-      </div>
-    </main>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100vh',
+      overflow: 'hidden',
+      background: 'var(--bg-canvas)',
+    }}>
+
+      {/* ── Header ── */}
+      <header style={{
+        height: 'var(--header-h)',
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0 20px',
+        background: 'rgba(250, 249, 247, 0.92)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: '1px solid var(--border-hairline)',
+        boxShadow: 'var(--shadow-header)',
+        flexShrink: 0,
+        zIndex: 20,
+        position: 'relative',
+        /* Header: 300ms, no bounce — structural chrome shouldn't be playful */
+        animation: 'header-in 300ms cubic-bezier(0.23, 1, 0.32, 1)',
+      }}>
+
+        {/* Wordmark */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 18,
+            fontWeight: 400,
+            fontStyle: 'italic',
+            color: 'var(--ink-primary)',
+            letterSpacing: '-0.02em',
+            lineHeight: 1,
+          }}>
+            DataFabric
+          </h1>
+          <div style={{
+            width: 1,
+            height: 16,
+            background: 'var(--border-light)',
+            margin: '0 2px',
+          }} />
+          <span style={{
+            fontFamily: 'var(--font-mono)',
+            fontSize: 9.5,
+            color: 'var(--ink-tertiary)',
+            letterSpacing: '0.12em',
+          }}>ShopStream</span>
+        </div>
+
+        <div style={{ flex: 1 }} />
+
+        {/* Pipeline breadcrumb */}
+        <nav style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+        }}>
+          {[
+            { label: 'Ingest', color: '#0891b2' },
+            { label: 'Bronze', color: '#16a34a' },
+            { label: 'Silver', color: '#16a34a' },
+            { label: 'Gold',   color: '#d97706' },
+            { label: 'ML',     color: '#7c3aed' },
+            { label: 'Serve',  color: '#be185d' },
+          ].map((s, i, arr) => (
+            <span
+              key={s.label}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                opacity: 0,
+                animation: 'pill-in 250ms cubic-bezier(0.23, 1, 0.32, 1) forwards',
+                /* Stagger: 50ms between items, offset after header (200ms) */
+                animationDelay: `${200 + i * 50}ms`,
+              }}
+            >
+              <span style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 11,
+                fontWeight: 500,
+                color: s.color,
+                opacity: 0.75,
+                padding: '2px 6px',
+                borderRadius: 4,
+                background: `${s.color}0f`,
+                letterSpacing: '-0.01em',
+              }}>{s.label}</span>
+              {i < arr.length - 1 && (
+                <span style={{
+                  color: 'var(--ink-ghost)',
+                  fontSize: 10,
+                  margin: '0 1px',
+                }}>›</span>
+              )}
+            </span>
+          ))}
+        </nav>
+
+        <div style={{ flex: 1 }} />
+
+        {/* Phase pill */}
+        <div style={{
+          padding: '4px 11px',
+          borderRadius: 7,
+          background: 'rgba(79,70,229,0.07)',
+          border: '1px solid rgba(79,70,229,0.16)',
+          fontFamily: 'var(--font-mono)',
+          fontSize: 9.5,
+          color: '#4f46e5',
+          letterSpacing: '0.1em',
+          fontWeight: 600,
+        }}>
+          Phase 5
+        </div>
+      </header>
+
+      {/* ── Graph canvas ── */}
+      <main style={{
+        flex: 1,
+        overflow: 'hidden',
+        position: 'relative',
+        zIndex: 0,
+      }}>
+        <LineageGraph />
+
+        {/* Corner gradient vignette — very subtle */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(247,245,242,0.4) 100%)',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }} />
+      </main>
+
+      {/* ── Metrics bar ── */}
+      <MetricsBar />
+    </div>
   )
 }
