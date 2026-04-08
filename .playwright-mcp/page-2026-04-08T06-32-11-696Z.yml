@@ -1,0 +1,135 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e7]: Loading pgAdmin 4 v8.5...
+  - generic [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e11]:
+        - button "File" [ref=e12] [cursor=pointer]:
+          - generic [ref=e13]:
+            - text: File
+            - img [ref=e14]
+        - button "Object" [ref=e16] [cursor=pointer]:
+          - generic [ref=e17]:
+            - text: Object
+            - img [ref=e18]
+        - button "Tools" [ref=e20] [cursor=pointer]:
+          - generic [ref=e21]:
+            - text: Tools
+            - img [ref=e22]
+        - button "Help" [ref=e24] [cursor=pointer]:
+          - generic [ref=e25]:
+            - text: Help
+            - img [ref=e26]
+      - button "Gravatar image for admin@example.com admin@example.com (internal)" [ref=e29] [cursor=pointer]:
+        - generic [ref=e30]:
+          - img "Gravatar image for admin@example.com" [ref=e32]
+          - text: admin@example.com (internal)
+          - img [ref=e33]
+    - generic [ref=e37]:
+      - generic [ref=e39]:
+        - tablist [ref=e40]:
+          - tablist [ref=e41]:
+            - generic [ref=e44]:
+              - tab "Object Explorer" [selected]:
+                - tab "Object Explorer" [selected]:
+                  - generic "Object Explorer":
+                    - generic: Object Explorer
+            - group [ref=e47]:
+              - button [disabled]:
+                - generic:
+                  - img
+              - button [disabled]:
+                - generic:
+                  - img
+              - button [disabled]:
+                - generic:
+                  - img
+              - button [disabled]:
+                - generic:
+                  - img
+        - tabpanel "Object Explorer" [ref=e50]:
+          - generic [ref=e56]:
+            - generic [ref=e57]: 
+            - generic [ref=e60] [cursor=pointer]: Servers
+      - generic [ref=e63]:
+        - tablist [ref=e64]:
+          - tablist [ref=e65]:
+            - generic [ref=e67]:
+              - tab "Dashboard Close" [selected] [ref=e69]:
+                - tab "Dashboard Close" [selected] [ref=e70]:
+                  - generic "Dashboard" [ref=e71]:
+                    - generic [ref=e72]: Dashboard
+                    - button "Close" [ref=e73] [cursor=pointer]:
+                      - img [ref=e75]
+              - tab "Properties Close" [ref=e78] [cursor=pointer]:
+                - tab "Properties Close" [ref=e79]:
+                  - generic "Properties" [ref=e80]:
+                    - generic [ref=e81]: Properties
+                    - button "Close" [ref=e82]:
+                      - img [ref=e84]
+              - tab "SQL Close" [ref=e87] [cursor=pointer]:
+                - tab "SQL Close" [ref=e88]:
+                  - generic "SQL" [ref=e89]:
+                    - generic [ref=e90]: SQL
+                    - button "Close" [ref=e91]:
+                      - img [ref=e93]
+              - tab "Statistics Close" [ref=e96] [cursor=pointer]:
+                - tab "Statistics Close" [ref=e97]:
+                  - generic "Statistics" [ref=e98]:
+                    - generic [ref=e99]: Statistics
+                    - button "Close" [ref=e100]:
+                      - img [ref=e102]
+              - tab "Dependencies Close" [ref=e105] [cursor=pointer]:
+                - tab "Dependencies Close" [ref=e106]:
+                  - generic "Dependencies" [ref=e107]:
+                    - generic [ref=e108]: Dependencies
+                    - button "Close" [ref=e109]:
+                      - img [ref=e111]
+              - tab "Dependents Close" [ref=e114] [cursor=pointer]:
+                - tab "Dependents Close" [ref=e115]:
+                  - generic "Dependents" [ref=e116]:
+                    - generic [ref=e117]: Dependents
+                    - button "Close" [ref=e118]:
+                      - img [ref=e120]
+              - tab "Processes Close" [ref=e123] [cursor=pointer]:
+                - tab "Processes Close" [ref=e124]:
+                  - generic "Processes" [ref=e125]:
+                    - generic [ref=e126]: Processes
+                    - button "Close" [ref=e127]:
+                      - img [ref=e129]
+            - button "More" [ref=e135] [cursor=pointer]:
+              - img [ref=e137]
+        - tabpanel "Dashboard Close" [ref=e141]:
+          - generic [ref=e144]:
+            - generic [ref=e147]:
+              - generic [ref=e148]: Welcome
+              - generic [ref=e149]:
+                - img [ref=e151]
+                - heading "Feature rich | Maximises PostgreSQL | Open Source" [level=4] [ref=e200]
+                - paragraph [ref=e201]: pgAdmin is an Open Source administration and management tool for the PostgreSQL database. It includes a graphical administration interface, an SQL query tool, a procedural code debugger and much more. The tool is designed to answer the needs of developers, DBAs and system administrators alike.
+            - generic [ref=e204]:
+              - generic [ref=e205]: Quick Links
+              - generic [ref=e207]:
+                - generic [ref=e209] [cursor=pointer]:
+                  - generic [ref=e210]: 
+                  - text: Add New Server
+                - generic [ref=e212] [cursor=pointer]:
+                  - generic [ref=e213]: 
+                  - text: Configure pgAdmin
+            - generic [ref=e216]:
+              - generic [ref=e217]: Getting Started
+              - generic [ref=e219]:
+                - link "PostgreSQL Documentation" [ref=e221] [cursor=pointer]:
+                  - /url: https://www.postgresql.org/docs
+                  - text: PostgreSQL Documentation
+                - link "pgAdmin Website" [ref=e224] [cursor=pointer]:
+                  - /url: https://www.pgadmin.org
+                  - generic [ref=e225]: 
+                  - text: pgAdmin Website
+                - link "Planet PostgreSQL" [ref=e227] [cursor=pointer]:
+                  - /url: https://planet.postgresql.org
+                  - generic [ref=e228]: 
+                  - text: Planet PostgreSQL
+                - link "Community Support" [ref=e230] [cursor=pointer]:
+                  - /url: https://www.postgresql.org/community
+                  - generic [ref=e231]: 
+                  - text: Community Support

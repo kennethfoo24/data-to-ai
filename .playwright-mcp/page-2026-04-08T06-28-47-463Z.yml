@@ -1,0 +1,32 @@
+- generic [ref=e4]:
+  - img [ref=e6]
+  - generic [ref=e128]:
+    - generic [ref=e131]: Login
+    - generic [ref=e133]:
+      - generic [ref=e134]:
+        - textbox "Email Address / Username" [active] [ref=e135]
+        - group
+      - generic [ref=e136]:
+        - textbox "Password" [ref=e137]
+        - group
+      - link "Forgotten your password?" [ref=e139] [cursor=pointer]:
+        - /url: /browser/reset_password
+      - generic [ref=e140]:
+        - combobox [ref=e141] [cursor=pointer]:
+          - option "English" [selected]
+          - option "Chinese (Simplified)"
+          - option "Czech"
+          - option "French"
+          - option "German"
+          - option "Indonesian"
+          - option "Italian"
+          - option "Japanese"
+          - option "Korean"
+          - option "Polish"
+          - option "Portuguese (Brazilian)"
+          - option "Russian"
+          - option "Spanish"
+        - img
+        - group
+      - button "Login" [disabled]:
+        - generic: Login

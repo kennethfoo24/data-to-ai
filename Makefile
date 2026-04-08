@@ -4,20 +4,15 @@ ifneq (,$(wildcard .env))
   export
 endif
 
-.PHONY: up up-full down seed logs ps build clean setup help
+.PHONY: up down seed logs ps build clean setup help
 
-## Start core services (~8GB RAM)
+## Start all services (~8GB RAM)
 up:
-	docker compose --profile $${COMPOSE_PROFILES:-core} up -d
-
-## Start full profile (Airbyte, MinIO, pgAdmin) (~16GB RAM)
-up-full:
-	COMPOSE_PROFILES=full docker compose -f docker-compose.yml -f docker-compose.full.yml --profile full up -d
+	docker compose --profile core up -d
 
 ## Stop all services
 down:
 	docker compose --profile core down
-	docker compose -f docker-compose.yml -f docker-compose.full.yml --profile full down 2>/dev/null || true
 
 ## Generate and load seed data
 seed:
@@ -26,11 +21,11 @@ seed:
 
 ## Tail logs
 logs:
-	docker compose --profile $${COMPOSE_PROFILES:-core} logs -f
+	docker compose --profile core logs -f
 
 ## Show running containers
 ps:
-	docker compose --profile $${COMPOSE_PROFILES:-core} ps
+	docker compose --profile core ps
 
 ## Build custom Docker images
 build:

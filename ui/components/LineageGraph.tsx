@@ -101,6 +101,13 @@ const logos: Record<string, React.ReactNode> = {
       <polygon points="8,16 24,16 21,27 11,27" fill="#38bdf8" opacity="0.7"/>
     </svg>
   ),
+  minio: (
+    <svg viewBox="0 0 32 32" width="20" height="20">
+      <rect width="32" height="32" rx="6" fill="#C72C48"/>
+      <path d="M7 22V10l9 6 9-6v12" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="16" cy="16" r="2.5" fill="white"/>
+    </svg>
+  ),
 }
 
 // ─── Node card ────────────────────────────────────────────────────────────────
@@ -141,7 +148,7 @@ function PipelineNode({ data }: NodeProps) {
       className={`df-node ${isActive ? 'active' : ''} ${isGrey ? 'greyed' : ''}`}
       style={{ animationDelay: `${(nd.animDelay ?? 0) * 40}ms` }}
       onClick={handleClick}
-      title={isGrey ? 'Available in full profile' : nd.url ? `Open ${nd.label}` : nd.label}
+      title={nd.url ? `Open ${nd.label}` : nd.label}
     >
       <Handle type="target" position={Position.Left}   id="in"  />
       <Handle type="source" position={Position.Right}  id="out" />
@@ -332,7 +339,7 @@ function buildGraph() {
     // Sources
     {
       id: 'postgres', type: 'pipeline', position: { x: 20, y: 100 },
-      data: { label: 'PostgreSQL', sublabel: ':5432 · OLTP', logoKey: 'postgres', status: 'active', tag: 'batch', category: 'source', animDelay: 0 },
+      data: { label: 'PostgreSQL', sublabel: ':5432 · OLTP', logoKey: 'postgres', url: 'http://localhost:5050', status: 'active', tag: 'batch', category: 'source', animDelay: 0 },
     },
     {
       id: 'kafka', type: 'pipeline', position: { x: 20, y: 260 },

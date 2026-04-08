@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 # DataFabric one-shot setup
-# Usage: bash scripts/setup.sh [core|full]
 set -euo pipefail
 cd "$(dirname "$0")/.."
-
-PROFILE=${1:-core}
 
 echo ""
 echo "╔══════════════════════════════════════════╗"
 echo "║   DataFabric — ShopStream Setup          ║"
 echo "╚══════════════════════════════════════════╝"
-echo "Profile: $PROFILE"
 echo ""
 
 # 1. Copy .env if missing
@@ -37,25 +33,17 @@ python3 seed/generate_data.py
 # 3. Build Docker images
 echo ""
 echo "→ Building Docker images (first run takes ~5 min)..."
-if [ "$PROFILE" = "full" ]; then
-  docker compose -f docker-compose.yml -f docker-compose.full.yml --profile full build
-else
-  docker compose --profile core build
-fi
+docker compose --profile core build
 
 # 4. Start services
 echo ""
 echo "→ Starting services..."
-if [ "$PROFILE" = "full" ]; then
-  COMPOSE_PROFILES=full docker compose -f docker-compose.yml -f docker-compose.full.yml --profile full up -d
-else
-  COMPOSE_PROFILES=core docker compose --profile core up -d
-fi
+docker compose --profile core up -d
 
 # 5. Wait for Postgres
 echo ""
 echo "→ Waiting for Postgres..."
-until docker compose exec -T postgres pg_isready -U postgres -q 2>/dev/null; do
+until docker compose exec -T postgres pg_isready -U admin -q 2>/dev/null; do
   printf '.'
   sleep 2
 done
@@ -89,15 +77,11 @@ echo "║   DataFabric is running!                                     ║"
 echo "╠══════════════════════════════════════════════════════════════╣"
 echo "║   Lineage UI   →  http://localhost:3000                      ║"
 echo "║   Airflow      →  http://localhost:8082  (admin / admin)     ║"
-echo "║   MLflow       →  http://localhost:5000                      ║"
+echo "║   MLflow       →  http://localhost:5001                      ║"
 echo "║   FastAPI docs →  http://localhost:8001/docs                 ║"
 echo "║   Kafka UI     →  http://localhost:8080                      ║"
 echo "║   Spark UI     →  http://localhost:4040                      ║"
-if [ "$PROFILE" = "full" ]; then
-echo "║   Airbyte      →  http://localhost:8000                      ║"
-echo "║   MinIO        →  http://localhost:9001                      ║"
-echo "║   pgAdmin      →  http://localhost:5050                      ║"
-fi
+echo "║   pgAdmin      →  http://localhost:5050  (admin@example.com / Admin1234) ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
 echo "Commands:  make up | make down | make logs | make clean"

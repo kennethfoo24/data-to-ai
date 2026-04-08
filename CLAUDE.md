@@ -13,8 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 make setup
 
 # Start/stop services
-make up          # core profile (~8GB RAM)
-make up-full     # full profile (~16GB RAM)
+make up          # start all services (~8GB RAM)
 make down
 
 # Build Docker images
@@ -35,14 +34,9 @@ make logs
 make ps
 ```
 
-## Two Deployment Profiles
+## Deployment
 
-| Profile | RAM | Services | Use case |
-|---------|-----|----------|----------|
-| `core` | ~8GB | 9 services | Local development |
-| `full` | ~16GB | 16 services | Enterprise-like with Airbyte + MinIO + pgAdmin |
-
-The full profile adds: Hive Metastore, MinIO (S3), Airbyte, pgAdmin. In core, Iceberg uses a filesystem catalog; in full, it uses Hive Metastore backed by MinIO.
+Single profile: `core` (~8GB RAM, 10 services). Run with `make up`. Iceberg uses a filesystem (hadoop) catalog at `/warehouse`.
 
 ## Architecture & Data Flow
 
@@ -71,23 +65,23 @@ Kafka ──────────► Spark Structured Streaming ──► Bro
 
 ## Service URLs
 
-| Service | URL |
-|---------|-----|
-| Airflow | http://localhost:8082 (admin/admin) |
-| Spark UI | http://localhost:4040 |
-| MLflow | http://localhost:5001 |
-| Kafka UI | http://localhost:8080 |
-| FastAPI | http://localhost:8001 |
-| Next.js UI | http://localhost:3000 |
-| pgAdmin (full) | http://localhost:5050 (admin@shopstream.local/admin) |
-| Airbyte (full) | http://localhost:8000 |
-| MinIO (full) | http://localhost:9001 (minioadmin/minioadmin) |
+| Service | URL | Credentials |
+|---------|-----|-------------|
+| Next.js UI | http://localhost:3000 | — |
+| Airflow | http://localhost:8082 | admin / admin |
+| MLflow | http://localhost:5001 | — |
+| FastAPI docs | http://localhost:8001/docs | — |
+| Kafka UI | http://localhost:8080 | — |
+| Spark UI | http://localhost:4040 | — |
+| pgAdmin | http://localhost:5050 | admin@example.com / Admin1234 |
+| Postgres | localhost:5432 | admin / admin (db: shopstream) |
 
 ## Key File Locations
 
-- `docker-compose.yml` — Core profile (9 services)
-- `docker-compose.full.yml` — Full profile overrides
+- `docker-compose.yml` — All services (10 services, core profile only)
 - `.env.example` — All environment variables; copy to `.env` before first run
+- `infra/pgadmin/servers.json` — Pre-registers ShopStream Postgres server in pgAdmin
+- `infra/pgadmin/pgpass` — Saves Postgres password so pgAdmin connects without prompting
 - `infra/` — Dockerfiles and init scripts for each service
 - `infra/postgres/init.sql` — Creates airflow, mlflow DBs/users on first start
 - `infra/spark/Dockerfile` — Spark image (Python 3.8); use `pandas<=2.0.3`
@@ -242,7 +236,7 @@ Fixes applied after initial Phase 5 to make the UI accurately reflect live data.
 
 ### LineageGraph (`ui/components/LineageGraph.tsx`)
 - Removed `url` from both dbt nodes — dbt has no web UI in core profile (was pointing to `:8580`)
-- Removed `url` from PostgreSQL node — pgAdmin (`:5050`) is full-profile only
+- PostgreSQL node links to pgAdmin (`:5050`) — click to open pgAdmin pre-loaded with the ShopStream server
 
 ### Seed (`seed/seed.sh`)
 - Added inventory seeding: loads `products.csv` via a Postgres temp table → `inventory` table

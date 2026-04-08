@@ -35,28 +35,6 @@ open http://localhost:3000
 
 Setup takes ~5 minutes on first run (Docker image builds). Subsequent starts take ~2 minutes.
 
-## Profiles
-
-| Profile | RAM | Best for |
-|---|---|---|
-| `core` (default) | ~8GB | Laptop demo |
-| `full` | ~16GB | Full demo — adds Airbyte UI, MinIO object storage, pgAdmin |
-
-```bash
-bash scripts/setup.sh full   # full profile
-```
-
-## Configuration
-
-On first run, `.env` is auto-created from `.env.example`. Edit it to change passwords.
-
-| Variable | Default | Notes |
-|---|---|---|
-| `POSTGRES_PASSWORD` | `postgres` | Change before any public deployment |
-| `AIRFLOW_FERNET_KEY` | pre-filled | Regenerate for production |
-| `MINIO_ROOT_PASSWORD` | `minioadmin` | Full profile only |
-| `COMPOSE_PROFILES` | `core` | Set to `full` for full profile |
-
 ## Commands
 
 ```bash
@@ -69,19 +47,20 @@ make ps         # Show running containers
 make clean      # Stop + remove volumes + delete seed data
 ```
 
-## Service URLs
+## Service URLs & Credentials
 
-| Service | URL | Login |
-|---|---|---|
-| **Lineage UI** | http://localhost:3000 | — |
-| **Airflow** | http://localhost:8082 | admin / admin |
-| **MLflow** | http://localhost:5001 | — |
-| **FastAPI docs** | http://localhost:8001/docs | — |
-| **Kafka UI** | http://localhost:8080 | — |
-| **Spark UI** | http://localhost:4040 | — |
-| pgAdmin *(full)* | http://localhost:5050 | admin@shopstream.local / admin |
-| Airbyte *(full)* | http://localhost:8000 | — |
-| MinIO *(full)* | http://localhost:9001 | minioadmin / minioadmin |
+| Service | URL | Username | Password |
+|---|---|---|---|
+| **Lineage UI** | http://localhost:3000 | — | — |
+| **Airflow** | http://localhost:8082 | `admin` | `admin` |
+| **MLflow** | http://localhost:5001 | — | — |
+| **FastAPI docs** | http://localhost:8001/docs | — | — |
+| **Kafka UI** | http://localhost:8080 | — | — |
+| **Spark UI** | http://localhost:4040 | — | — |
+| **pgAdmin** | http://localhost:5050 | `admin@example.com` | `Admin1234` |
+| **PostgreSQL** | localhost:5432 | `admin` | `admin` |
+
+> Click the **PostgreSQL** node in the Lineage UI to open pgAdmin. The ShopStream server is pre-registered — no extra setup needed.
 
 ## Architecture
 
