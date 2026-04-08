@@ -2,6 +2,9 @@
 
 A fully runnable, Docker Compose portfolio project demonstrating modern data engineering and machine learning — built around **ShopStream**, a fictional e-commerce platform.
 
+### Data-to-AI Architecture Interface
+![App Screenshot](https://i.imgur.com/EBBsGQ5.png)
+
 ## What It Demonstrates
 
 | Layer | Tools |
@@ -102,6 +105,20 @@ make clean      # Stop + remove volumes + delete seed data
                                          FastAPI
                                          Next.js Lineage UI
 ```
+### Data-to-AI Architecture Interface
+![App Screenshot](https://i.imgur.com/EBBsGQ5.png)
+
+### Kafka Streams
+![App Screenshot](https://i.imgur.com/rcndTCW.png)
+
+### Spark Jobs
+![App Screenshot](https://i.imgur.com/F4bZOUN.png)
+
+### Airflow DAG
+![App Screenshot](https://i.imgur.com/G7ntjQo.png)
+
+### MLFlow Experiments
+![App Screenshot](https://i.imgur.com/dBAmPZR.png)
 
 ## Databricks
 
