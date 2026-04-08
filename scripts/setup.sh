@@ -22,6 +22,13 @@ else
   echo "✓ .env already exists."
 fi
 
+# Generate AIRFLOW_FERNET_KEY if it's still the placeholder
+if grep -q "^AIRFLOW_FERNET_KEY=GENERATE_ME" .env; then
+  FERNET_KEY=$(python3 -c "import base64, os; print(base64.urlsafe_b64encode(os.urandom(32)).decode())")
+  sed -i.bak "s|^AIRFLOW_FERNET_KEY=.*|AIRFLOW_FERNET_KEY=${FERNET_KEY}|" .env && rm -f .env.bak
+  echo "✓ Generated AIRFLOW_FERNET_KEY."
+fi
+
 # 2. Generate seed CSVs
 echo ""
 echo "→ Generating seed data..."
