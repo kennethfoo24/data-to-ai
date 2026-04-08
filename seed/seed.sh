@@ -8,7 +8,7 @@ echo "==> [2/4] Loading customers + inventory into Postgres..."
 docker compose exec postgres psql -U postgres -d shopstream \
   -c "TRUNCATE customers RESTART IDENTITY CASCADE;"
 docker compose exec postgres psql -U postgres -d shopstream \
-  -c "\COPY customers(customer_id,name,email,city,country,signup_date,age,loyalty_tier) FROM '/seed/customers.csv' CSV HEADER"
+  -c "COPY customers(customer_id,name,email,city,country,signup_date,age,loyalty_tier) FROM '/seed/customers.csv' CSV HEADER"
 docker compose exec postgres psql -U postgres -d shopstream \
   -c "SELECT setval(pg_get_serial_sequence('customers','customer_id'), MAX(customer_id)) FROM customers;"
 docker compose exec postgres psql -U postgres -d shopstream \
