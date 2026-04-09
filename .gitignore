@@ -20,4 +20,9 @@ dbt/.user.yml
 # Skills/agents (local tooling, not project code)
 .agents/
 .claude/
+.playwright-mcp/
 skills-lock.json
+agents/
+playwright/
+playwright-report/
+test-results/
