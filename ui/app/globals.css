@@ -7,26 +7,26 @@
 }
 
 :root {
-  /* ── Warm white foundation ── */
-  --bg-canvas:   #f7f5f2;
-  --bg-surface:  #faf9f7;
+  /* ── Lavender-periwinkle foundation ── */
+  --bg-canvas:   #edf0fb;
+  --bg-surface:  #f2f5ff;
   --bg-raised:   #ffffff;
-  --bg-node:     rgba(255, 253, 250, 0.92);
+  --bg-node:     rgba(255, 255, 255, 0.97);
 
   /* ── Borders ── */
-  --border-hairline: rgba(0, 0, 0, 0.055);
-  --border-light:    rgba(0, 0, 0, 0.09);
-  --border-mid:      rgba(0, 0, 0, 0.14);
+  --border-hairline: rgba(99, 102, 241, 0.10);
+  --border-light:    rgba(99, 102, 241, 0.17);
+  --border-mid:      rgba(99, 102, 241, 0.30);
 
   /* ── Ink & type ── */
-  --ink-primary:   #1a1714;
-  --ink-secondary: #6b6560;
-  --ink-tertiary:  #a09a93;
-  --ink-ghost:     #c8c2bb;
+  --ink-primary:   #1e1b4b;
+  --ink-secondary: #4c4980;
+  --ink-tertiary:  #7c79b0;
+  --ink-ghost:     #b9b6d9;
 
   /* ── Accent ── */
-  --accent:      #4f46e5;
-  --accent-soft: rgba(79, 70, 229, 0.10);
+  --accent:      #6366f1;
+  --accent-soft: rgba(99, 102, 241, 0.10);
 
   /* ── Status ── */
   --green:      #16a34a;
@@ -34,18 +34,18 @@
   --amber:      #d97706;
   --red:        #dc2626;
 
-  /* ── Shadows (warm-tinted) ── */
+  /* ── Shadows (cool-indigo tinted) ── */
   --shadow-node:
-    0 1px 2px rgba(0,0,0,0.04),
-    0 4px 12px rgba(0,0,0,0.06),
-    0 12px 32px rgba(0,0,0,0.05);
+    0 1px 3px rgba(30, 27, 75, 0.05),
+    0 4px 14px rgba(30, 27, 75, 0.07),
+    0 12px 32px rgba(30, 27, 75, 0.05);
   --shadow-node-hover:
-    0 2px 4px rgba(0,0,0,0.06),
-    0 8px 24px rgba(0,0,0,0.10),
-    0 24px 48px rgba(0,0,0,0.08);
+    0 2px 6px rgba(30, 27, 75, 0.08),
+    0 8px 28px rgba(30, 27, 75, 0.13),
+    0 24px 48px rgba(30, 27, 75, 0.08);
   --shadow-header:
     0 1px 0 var(--border-hairline),
-    0 4px 16px rgba(0,0,0,0.04);
+    0 4px 16px rgba(30, 27, 75, 0.06);
 
   /* ── Custom easing curves (Emil) ── */
   --ease-out:     cubic-bezier(0.23, 1, 0.32, 1);
@@ -72,21 +72,22 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Subtle canvas atmosphere */
+/* Lavender atmospheric gradient */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   background-image:
-    radial-gradient(ellipse 80% 50% at 20% 20%, rgba(79,70,229,0.028) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(217,119,6,0.022) 0%, transparent 50%);
+    radial-gradient(ellipse 75% 55% at 10% 10%, rgba(99,102,241,0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 45% at 90% 85%, rgba(139,92,246,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 55% 45%, rgba(6,182,212,0.04) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
 
 /* ── ReactFlow overrides ── */
 .react-flow__background { background: var(--bg-canvas) !important; }
-.react-flow__background pattern circle { fill: rgba(0,0,0,0.065) !important; }
+.react-flow__background pattern circle { fill: rgba(99,102,241,0.10) !important; }
 .react-flow__attribution { display: none !important; }
 
 .react-flow__controls {
@@ -103,11 +104,10 @@ body::before {
   color: var(--ink-tertiary) !important;
   width: 30px !important;
   height: 30px !important;
-  /* Button press: 150ms ease-out — fast feedback */
   transition: background 150ms ease-out, color 150ms ease-out !important;
 }
 .react-flow__controls-button:last-child { border-bottom: none !important; }
-.react-flow__controls-button:hover { background: var(--bg-canvas) !important; color: var(--accent) !important; }
+.react-flow__controls-button:hover { background: var(--bg-surface) !important; color: var(--accent) !important; }
 .react-flow__controls-button:active { background: var(--accent-soft) !important; transform: scale(0.97); }
 .react-flow__controls-button svg { fill: currentColor !important; max-width: 11px !important; max-height: 11px !important; }
 
@@ -145,11 +145,10 @@ body::before {
 
 /* ── Keyframes ── */
 
-/* Node stagger entrance — translateY not scale(0), combined with opacity */
 @keyframes node-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -157,37 +156,31 @@ body::before {
   }
 }
 
-/* Header slide in — structural chrome, no bounce */
 @keyframes header-in {
   from { opacity: 0; transform: translateY(-4px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Pill stagger — horizontal slide */
 @keyframes pill-in {
   from { opacity: 0; transform: translateX(-6px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 
-/* Value pop — tiny translateY for number changes */
 @keyframes value-in {
   from { opacity: 0; transform: translateY(3px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Active node breathing — constant on-screen motion, ease-in-out is correct */
 @keyframes breathe-accent {
-  0%, 100% { box-shadow: var(--shadow-node), 0 0 0 0 rgba(79,70,229,0); }
-  50%       { box-shadow: var(--shadow-node), 0 0 0 3px rgba(79,70,229,0.08); }
+  0%, 100% { box-shadow: var(--shadow-node), 0 0 0 0 rgba(99,102,241,0); }
+  50%       { box-shadow: var(--shadow-node), 0 0 0 4px rgba(99,102,241,0.08); }
 }
 
-/* Status dot pulse ring */
 @keyframes pulse-ring {
   0%   { transform: scale(1);   opacity: 0.5; }
-  100% { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
 }
 
-/* Edge silk flow */
 @keyframes silk-flow {
   from { stroke-dashoffset: 32; }
   to   { stroke-dashoffset: 0; }
@@ -198,32 +191,30 @@ body::before {
   background: var(--bg-node);
   border: 1px solid var(--border-light);
   border-radius: 14px;
-  padding: 13px 15px;
-  min-width: 164px;
+  padding: 14px 17px;
+  min-width: 218px;
   cursor: pointer;
   position: relative;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-node);
 
-  /* Hover: 200ms strong ease-out — correct for enter state */
   transition:
     box-shadow  200ms var(--ease-out),
     transform   200ms var(--ease-out),
     border-color 150ms ease-out;
 
-  /* Stagger entrance — each node has animDelay set inline */
   opacity: 0;
-  animation: node-in 300ms var(--ease-out) forwards;
+  animation: node-in 320ms var(--ease-out) forwards;
 }
 
-/* Gloss overlay — CSS, not animated, just visual depth */
+/* Gloss overlay */
 .df-node::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0) 50%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.60) 0%, rgba(255,255,255,0) 50%);
   pointer-events: none;
 }
 
@@ -233,24 +224,22 @@ body::before {
   border-color: var(--border-mid);
 }
 
-/* Press feedback: instant, scale(0.97) — confirms UI heard the user */
 .df-node:active {
   transform: translateY(-1px) scale(0.97);
   transition-duration: 100ms;
 }
 
 .df-node.active {
-  border-color: rgba(79,70,229,0.22);
-  /* Constant on-screen motion → ease-in-out is correct here */
-  animation: node-in 300ms var(--ease-out) forwards, breathe-accent 4s ease-in-out 300ms infinite;
+  border-color: rgba(99,102,241,0.26);
+  animation: node-in 320ms var(--ease-out) forwards, breathe-accent 4s ease-in-out 320ms infinite;
 }
 
 .df-node.greyed {
-  opacity: 0.32;
+  opacity: 0.28;
   filter: grayscale(1) blur(0.3px);
   pointer-events: none;
   box-shadow: none;
-  animation: node-in 300ms var(--ease-out) forwards;
+  animation: node-in 320ms var(--ease-out) forwards;
 }
 
 /* ── Scrollbar ── */
@@ -259,7 +248,6 @@ body::before {
 ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
 
 /* ── Reduced motion ── */
-/* Fewer and gentler animations — not zero. Keep opacity/color, remove position movement. */
 @media (prefers-reduced-motion: reduce) {
   .df-node {
     animation: none;

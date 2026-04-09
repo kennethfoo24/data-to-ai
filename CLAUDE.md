@@ -197,25 +197,29 @@ Interactive ReactFlow lineage graph showing the full pipeline from sources throu
 |------|---------|
 | `ui/package.json` | Next.js 14.2.3, @xyflow/react ^12, motion ^11, tailwindcss ^3 |
 | `ui/tsconfig.json` | TypeScript config with `@/*` path aliases and `moduleResolution: bundler` |
-| `ui/app/globals.css` | Design system: warm white palette, Lora+DM Sans+JetBrains Mono, Emil Kowalski animation principles |
+| `ui/app/globals.css` | Design system: lavender/periwinkle palette (`#edf0fb` canvas), Lora+DM Sans+JetBrains Mono, Emil Kowalski animation principles |
 | `ui/app/layout.tsx` | Minimal layout loading globals.css |
-| `ui/app/page.tsx` | Full-bleed layout: header, ReactFlow canvas, MetricsBar |
-| `ui/components/LineageGraph.tsx` | ReactFlow graph with custom `PipelineNode`, `SilkEdge` (animateMotion particles), layer labels |
+| `ui/app/page.tsx` | Full-bleed layout: "ShopStream" header (italic Lora 22px), ReactFlow canvas, MetricsBar |
+| `ui/components/LineageGraph.tsx` | ReactFlow graph: `PipelineNode`, `SilkEdge` (bezier + animateMotion particles), `SilkStraightEdge` (vertical drops), `LayerLabel` |
 | `ui/components/MetricsBar.tsx` | Bottom bar polling `/api/status`: 6 metric pills, live indicator, profile badge |
 | `docker-compose.yml` | `ui` service: Next.js on port 3000, `NEXT_PUBLIC_API_URL=http://localhost:8001` |
 
 ### Key notes
 - `NEXT_PUBLIC_API_URL` must be `http://localhost:8001` (browser calls FastAPI directly, not via Docker hostname)
-- `tsconfig.json` is required for IDE TypeScript resolution of `@/*` path aliases — Next.js resolves them at build without it but the TS language server cannot
 - `LineageGraph` is dynamically imported with `ssr: false` (ReactFlow requires a browser environment)
-- `SilkEdge` uses SVG `<animateMotion>` with two offset circles for silk-flow particle effect
-- Node entrance stagger: `animDelay * 40ms` (12 nodes = 480ms total, avoiding 720ms slowness at 60ms)
-- Animation principles (Emil Kowalski): `cubic-bezier(0.23, 1, 0.32, 1)` ease-out, never `scale(0)` entry, `:active` press feedback, `prefers-reduced-motion` support, hover guard for touch devices
+- Two edge types: `SilkEdge` (bezier, for cross-column connections) and `SilkStraightEdge` (getStraightPath, for within-column vertical drops like dbt→Iceberg)
+- Layout: 7 columns (Sources/Ingest/Bronze/Silver/Gold/ML/Serving), 280px column gaps, `COL`/`ROW` constants at the top of `LineageGraph.tsx`
+- dbt nodes share a column with their output Iceberg table (dbt on top row, Iceberg on bottom) — connected via `bottom-out → top-in` handles with `SilkStraightEdge`
+- Node entrance stagger: `animDelay * 45ms`; animation principles: `cubic-bezier(0.23, 1, 0.32, 1)` ease-out, `prefers-reduced-motion` support
+- Layer labels (`LayerLabel` node type): `--ink-secondary` color, 10.5px mono weight 500 — must stay readable against the lavender canvas
+- MiniMap removed; Controls (zoom +/−/fit) kept
 - Rebuild: `docker compose --profile core build ui && docker compose --profile core up -d ui`
+- Dev server (hot reload, no Docker rebuild): `npm --prefix ui run dev -- -p 3001`
 
 ### Key lessons learned
 - **`@xyflow/react` vs `reactflow`**: Use `@xyflow/react` (v12) which has updated API; `reactflow` is the legacy v11 package
 - **ReactFlow + SSR**: Always use `dynamic(() => import(...), { ssr: false })` — ReactFlow uses browser APIs at import time
+- **Backward S-curves**: When source and target nodes share the same x column, default left/right handles create backward bezier curves. Fix: use `bottom-out → top-in` handles + `getStraightPath` for a clean vertical line
 - **`tsconfig.json` missing causes false IDE errors**: Next.js finds it but TypeScript language server needs it in the project root
 - **`NEXT_PUBLIC_*` baked at build time**: These vars are embedded in the JS bundle during `next build`, not at runtime — must match where the browser actually calls
 

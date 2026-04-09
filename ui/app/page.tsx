@@ -59,7 +59,7 @@ export default function Home() {
         display: 'flex',
         alignItems: 'center',
         padding: '0 20px',
-        background: 'rgba(250, 249, 247, 0.92)',
+        background: 'rgba(248, 250, 255, 0.94)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
         borderBottom: '1px solid var(--border-hairline)',
@@ -72,30 +72,18 @@ export default function Home() {
       }}>
 
         {/* Wordmark */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <h1 style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 18,
-            fontWeight: 400,
+            fontSize: 22,
+            fontWeight: 500,
             fontStyle: 'italic',
             color: 'var(--ink-primary)',
             letterSpacing: '-0.02em',
             lineHeight: 1,
           }}>
-            DataFabric
+            ShopStream
           </h1>
-          <div style={{
-            width: 1,
-            height: 16,
-            background: 'var(--border-light)',
-            margin: '0 2px',
-          }} />
-          <span style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: 9.5,
-            color: 'var(--ink-tertiary)',
-            letterSpacing: '0.12em',
-          }}>ShopStream</span>
         </div>
 
         <div style={{ flex: 1 }} />
@@ -154,11 +142,11 @@ export default function Home() {
         <div style={{
           padding: '4px 11px',
           borderRadius: 7,
-          background: 'rgba(79,70,229,0.07)',
-          border: '1px solid rgba(79,70,229,0.16)',
+          background: 'rgba(99,102,241,0.08)',
+          border: '1px solid rgba(99,102,241,0.20)',
           fontFamily: 'var(--font-mono)',
           fontSize: 9.5,
-          color: '#4f46e5',
+          color: '#6366f1',
           letterSpacing: '0.1em',
           fontWeight: 600,
         }}>
@@ -179,7 +167,7 @@ export default function Home() {
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(247,245,242,0.4) 100%)',
+          background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(237,240,251,0.45) 100%)',
           pointerEvents: 'none',
           zIndex: 1,
         }} />
