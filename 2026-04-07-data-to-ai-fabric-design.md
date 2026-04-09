@@ -174,6 +174,45 @@ FastAPI loads the `Production` alias from MLflow Model Registry on startup.
 
 **Live metrics bar** (bottom): records/hr, Kafka consumer lag, Spark job count, dbt model pass rate, churn model accuracy, API latency (p50/p95). All sourced from `GET /api/status`.
 
+### Iceberg Catalog Explorer (Phase 6)
+
+Clicking any Iceberg node (`bronze`, `silver`, `gold`) or dbt node (`dbt-silver`, `dbt-gold`) opens a **modal** showing schema + 5 sample rows for each table in that layer.
+
+**dbt node modal:**
+- Tabs for each model in the layer (e.g. `orders_clean` | `customers_clean` | `clickstream_sessions`)
+- Left panel: syntax-highlighted SQL source (static import from `dbt/models/`)
+- Right panel: output schema (column name + type) + 5 sample rows
+- "View on GitHub →" link → `https://github.com/kennethfoo24/data-to-ai/blob/main/dbt/models/{layer}/{model}.sql`
+- "Open full page →" link → `/catalog/{layer}/{table}`
+
+**Iceberg node modal:**
+- Tabs for each table in that layer
+- Schema panel: column name + data type
+- Sample data panel: 5 rows
+- Row count badge
+
+**Catalog page** (`/catalog/[layer]/[table]`):
+- Full-width dedicated page with sidebar listing all tables grouped by Bronze / Silver / Gold
+- Full schema + horizontally scrollable sample data grid
+- "View on GitHub →" for dbt models
+- Back link → `/`
+
+**Data flow:**
+```
+Node click → modal opens → GET /api/catalog/{layer}/{table}
+→ FastAPI reads /warehouse/local/{layer}/{table}/data/*.parquet via pyarrow
+→ returns { columns, rows (5), row_count }
+→ modal renders schema + sample rows + SQL + GitHub link
+→ "Open full page →" → /catalog/[layer]/[table]
+```
+
+**New files:**
+- `serving/routers/catalog.py` — reads Iceberg Parquet via pyarrow, returns schema + 5 rows
+- `ui/components/CatalogModal.tsx` — modal component
+- `ui/app/catalog/[layer]/[table]/page.tsx` — full catalog page
+
+**Infrastructure change:** `/warehouse` named volume mounted on `fastapi` container in `docker-compose.yml`.
+
 ---
 
 ## Project Structure

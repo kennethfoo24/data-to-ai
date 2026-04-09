@@ -17,6 +17,7 @@ A fully runnable, Docker Compose portfolio project demonstrating modern data eng
 | **ML Training & Tracking** | PyTorch, MLflow |
 | **Model Serving** | FastAPI (`/predict/churn`, `/predict/recommend`) |
 | **Lineage Dashboard** | Next.js + ReactFlow — animated, clickable data lineage |
+| **Catalog Explorer** | Click any Iceberg or dbt node to browse schema, sample rows, and SQL |
 
 ## Prerequisites
 
@@ -83,6 +84,7 @@ make clean      # Stop + remove volumes + delete seed data
                                          MLflow
                                          FastAPI
                                          Next.js Lineage UI
+                                         Catalog Explorer (/catalog)
 ```
 ### Data-to-AI Architecture Interface
 ![App Screenshot](https://i.imgur.com/EBBsGQ5.png)
@@ -98,6 +100,9 @@ make clean      # Stop + remove volumes + delete seed data
 
 ### MLFlow Experiments
 ![App Screenshot](https://i.imgur.com/dBAmPZR.png)
+
+### Catalog Explorer
+Click any Bronze / Silver / Gold / dbt node in the lineage graph to browse table schema, sample rows, and (for dbt nodes) the SQL model source.
 
 ## Databricks
 

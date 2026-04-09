@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import {
   ReactFlow,
   Background,
@@ -20,6 +20,7 @@ import {
   BaseEdge,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import CatalogModal, { type ModalTarget } from './CatalogModal'
 
 // ─── Logos ───────────────────────────────────────────────────────────────────
 
@@ -121,6 +122,7 @@ interface NodeData {
   tag?: string
   animDelay?: number
   category?: string
+  onCatalogClick?: () => void
   [key: string]: unknown
 }
 
@@ -140,7 +142,11 @@ function PipelineNode({ data }: NodeProps) {
   const color    = categoryColor[nd.category ?? 'source'] ?? '#4f46e5'
 
   const handleClick = () => {
-    if (nd.url && !isGrey) window.open(nd.url, '_blank')
+    if (nd.onCatalogClick && !isGrey) {
+      ;(nd.onCatalogClick as () => void)()
+    } else if (nd.url && !isGrey) {
+      window.open(nd.url, '_blank')
+    }
   }
 
   return (
@@ -422,11 +428,43 @@ function buildGraph() {
   return { nodes, edges }
 }
 
+// ─── Catalog-clickable node IDs ───────────────────────────────────────────────
+
+const CATALOG_NODES: Record<string, ModalTarget> = {
+  bronze:     { nodeId: 'bronze',     label: 'Iceberg Bronze', layer: 'bronze', isDbt: false },
+  silver:     { nodeId: 'silver',     label: 'Iceberg Silver', layer: 'silver', isDbt: false },
+  gold:       { nodeId: 'gold',       label: 'Iceberg Gold',   layer: 'gold',   isDbt: false },
+  'dbt-silver': { nodeId: 'dbt-silver', label: 'dbt · Silver',  layer: 'silver', isDbt: true  },
+  'dbt-gold':   { nodeId: 'dbt-gold',   label: 'dbt · Gold',    layer: 'gold',   isDbt: true  },
+}
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8001'
+
 // ─── Export ───────────────────────────────────────────────────────────────────
 
 export default function LineageGraph() {
+  const [modalTarget, setModalTarget] = useState<ModalTarget | null>(null)
+
+  const openModal = useCallback((target: ModalTarget) => {
+    setModalTarget(target)
+  }, [])
+
   const { nodes: init, edges: initE } = buildGraph()
-  const [nodes, , onNodesChange] = useNodesState(init)
+
+  // Inject onCatalogClick into catalog-capable nodes
+  const initWithHandlers = init.map(n => {
+    const catalogTarget = CATALOG_NODES[n.id]
+    if (!catalogTarget) return n
+    return {
+      ...n,
+      data: {
+        ...n.data,
+        onCatalogClick: () => openModal(catalogTarget),
+      },
+    }
+  })
+
+  const [nodes, , onNodesChange] = useNodesState(initWithHandlers)
   const [edges, , onEdgesChange] = useEdgesState(initE)
 
   return (
@@ -452,6 +490,12 @@ export default function LineageGraph() {
           style={{ bottom: 68, right: 14 }}
         />
       </ReactFlow>
+
+      <CatalogModal
+        target={modalTarget}
+        onClose={() => setModalTarget(null)}
+        apiUrl={API_URL}
+      />
     </div>
   )
 }

@@ -25,6 +25,13 @@ if grep -q "^AIRFLOW_FERNET_KEY=GENERATE_ME" .env; then
   echo "✓ Generated AIRFLOW_FERNET_KEY."
 fi
 
+# Generate AIRFLOW_SECRET_KEY if it's still the placeholder
+if grep -q "^AIRFLOW_SECRET_KEY=CHANGE_ME" .env; then
+  SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_urlsafe(32))")
+  sed -i.bak "s|^AIRFLOW_SECRET_KEY=.*|AIRFLOW_SECRET_KEY=${SECRET_KEY}|" .env && rm -f .env.bak
+  echo "✓ Generated AIRFLOW_SECRET_KEY."
+fi
+
 # 2. Generate seed CSVs
 echo ""
 echo "→ Generating seed data..."

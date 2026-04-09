@@ -1,0 +1,622 @@
+- generic [active] [ref=e1]:
+  - banner:
+    - navigation [ref=e2]:
+      - generic [ref=e4]:
+        - button [ref=e5] [cursor=pointer]
+        - link [ref=e9] [cursor=pointer]:
+          - /url: /
+          - img [ref=e10]
+  - generic [ref=e22]:
+    - generic [ref=e23]:
+      - heading "DAGs" [level=2] [ref=e24]
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - link "All 4" [ref=e28] [cursor=pointer]:
+            - /url: /home?status=all
+            - text: All
+            - generic [ref=e29]: "4"
+          - link "Active 2" [ref=e30] [cursor=pointer]:
+            - /url: /home?status=active
+            - text: Active
+            - generic [ref=e31]: "2"
+          - link "Paused 2" [ref=e32] [cursor=pointer]:
+            - /url: /home?status=paused
+            - text: Paused
+            - generic [ref=e33]: "2"
+        - generic [ref=e34]:
+          - link "Running 0" [ref=e35] [cursor=pointer]:
+            - /url: /home?status=running
+            - text: Running
+            - generic [ref=e36]: "0"
+          - link "Failed 0" [ref=e37] [cursor=pointer]:
+            - /url: /home?status=failed
+            - text: Failed
+            - generic [ref=e38]: "0"
+        - combobox [ref=e44]:
+          - list [ref=e45]:
+            - listitem [ref=e46]:
+              - searchbox "Filter DAGs by tag" [ref=e47]
+        - generic [ref=e50]:
+          - generic [ref=e51]: Search DAGs
+          - searchbox "Search DAGs" [ref=e52]
+        - generic [ref=e53]:
+          - generic [ref=e54] [cursor=pointer]:
+            - checkbox "Auto-refresh" [checked] [ref=e55]
+            - text: Auto-refresh
+          - button [ref=e57] [cursor=pointer]:
+            - generic [ref=e58]: refresh
+      - table [ref=e61]:
+        - rowgroup [ref=e62]:
+          - row "info DAG Owner Runs Schedule Last Run Next Run Recent Tasks Actions Links" [ref=e63]:
+            - columnheader "info" [ref=e64]:
+              - generic [ref=e65]: info
+            - columnheader "DAG" [ref=e66]:
+              - tooltip "DAG" [ref=e67] [cursor=pointer]:
+                - text: DAG
+                - generic [ref=e68]: unfold_more
+            - columnheader "Owner" [ref=e69]:
+              - tooltip "Owner" [ref=e70] [cursor=pointer]:
+                - text: Owner
+                - generic [ref=e71]: unfold_more
+            - columnheader "Runs" [ref=e72]:
+              - text: Runs
+              - generic [ref=e73]: info
+            - columnheader "Schedule" [ref=e74]
+            - columnheader "Last Run" [ref=e75]:
+              - tooltip "Last Run" [ref=e76] [cursor=pointer]:
+                - text: Last Run
+                - generic [ref=e77]: unfold_more
+              - generic [ref=e78]: info
+            - columnheader "Next Run" [ref=e79]:
+              - tooltip "Next Run" [ref=e80] [cursor=pointer]:
+                - text: Next Run
+                - generic [ref=e81]: unfold_more
+              - generic [ref=e82]: info
+            - columnheader "Recent Tasks" [ref=e83]:
+              - text: Recent Tasks
+              - generic [ref=e84]: info
+            - columnheader "Actions" [ref=e85]
+            - columnheader "Links" [ref=e86]
+        - rowgroup [ref=e87]:
+          - row "ingest_batch bronze ingestion airflow None 2026-04-09, 01:26:08 Trigger DAG Delete DAG Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e88]:
+            - cell [ref=e89]:
+              - checkbox [checked] [ref=e91]
+            - cell "ingest_batch bronze ingestion" [ref=e93]:
+              - link "ingest_batch" [ref=e94] [cursor=pointer]:
+                - /url: /dags/ingest_batch/grid
+                - strong [ref=e95]: ingest_batch
+              - generic [ref=e96]:
+                - link "bronze" [ref=e97] [cursor=pointer]:
+                  - /url: "?tags=bronze"
+                - link "ingestion" [ref=e98] [cursor=pointer]:
+                  - /url: "?tags=ingestion"
+            - cell "airflow" [ref=e99]:
+              - link "airflow" [ref=e100] [cursor=pointer]:
+                - /url: "?search=airflow"
+            - cell [ref=e101]:
+              - img [ref=e102]:
+                - link "queued" [ref=e104] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=queued
+                  - generic "queued" [ref=e105]
+                - generic [ref=e106]:
+                  - link "success" [ref=e107] [cursor=pointer]:
+                    - /url: /dagrun/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=success
+                    - generic "success" [ref=e108]
+                  - generic: "2"
+                - link "running" [ref=e110] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=running
+                  - generic "running" [ref=e111]
+                - link "failed" [ref=e113] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=failed
+                  - generic "failed" [ref=e114]
+            - cell "None" [ref=e115]:
+              - link "None" [ref=e116] [cursor=pointer]:
+                - /url: /dagrun/list/?_flt_3_dag_id=ingest_batch
+              - generic [ref=e117]: info
+            - cell "2026-04-09, 01:26:08" [ref=e118]:
+              - link "2026-04-09, 01:26:08" [ref=e119] [cursor=pointer]:
+                - /url: /graph?dag_id=ingest_batch&execution_date=2026-04-09T01%3A26%3A08.545989%2B00%3A00
+                - time [ref=e120]: 2026-04-09, 01:26:08
+              - generic [ref=e121]: info
+            - cell [ref=e122]
+            - cell [ref=e123]:
+              - img [ref=e124]:
+                - link "none" [ref=e126] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_8_state=
+                  - generic "none" [ref=e127]
+                - link "removed" [ref=e129] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=removed
+                  - generic "removed" [ref=e130]
+                - link "scheduled" [ref=e132] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=scheduled
+                  - generic "scheduled" [ref=e133]
+                - link "queued" [ref=e135] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=queued
+                  - generic "queued" [ref=e136]
+                - link "running" [ref=e138] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=running
+                  - generic "running" [ref=e139]
+                - generic [ref=e140]:
+                  - link "success" [ref=e141] [cursor=pointer]:
+                    - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=success
+                    - generic "success" [ref=e142]
+                  - generic: "1"
+                - link "restarting" [ref=e144] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=restarting
+                  - generic "restarting" [ref=e145]
+                - link "failed" [ref=e147] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=failed
+                  - generic "failed" [ref=e148]
+                - link "up_for_retry" [ref=e150] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=up_for_retry
+                  - generic "up_for_retry" [ref=e151]
+                - link "up_for_reschedule" [ref=e153] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=up_for_reschedule
+                  - generic "up_for_reschedule" [ref=e154]
+                - link "upstream_failed" [ref=e156] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=upstream_failed
+                  - generic "upstream_failed" [ref=e157]
+                - link "skipped" [ref=e159] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=skipped
+                  - generic "skipped" [ref=e160]
+                - link "deferred" [ref=e162] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=deferred
+                  - generic "deferred" [ref=e163]
+                - link "shutdown" [ref=e165] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=ingest_batch&_flt_3_state=shutdown
+                  - generic "shutdown" [ref=e166]
+            - cell "Trigger DAG Delete DAG" [ref=e167]:
+              - generic [ref=e168]:
+                - link "Trigger DAG" [ref=e169] [cursor=pointer]:
+                  - /url: /dags/ingest_batch/trigger?redirect_url=%2Fhome
+                  - generic [ref=e170]: play_arrow
+                - link "Delete DAG" [ref=e171] [cursor=pointer]:
+                  - /url: /delete?dag_id=ingest_batch&redirect_url=%2Fhome
+                  - generic [ref=e172]: delete_outline
+            - cell "Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e173]:
+              - generic [ref=e174]:
+                - generic:
+                  - link "Code":
+                    - /url: /dags/ingest_batch/code
+                    - generic [ref=e175] [cursor=pointer]: code
+                    - text: Code
+                  - link "Gantt":
+                    - /url: /dags/ingest_batch/gantt
+                    - generic [ref=e176] [cursor=pointer]: vertical_distribute
+                    - text: Gantt
+                  - link "Landing":
+                    - /url: /dags/ingest_batch/landing-times
+                    - generic [ref=e177] [cursor=pointer]: flight_land
+                    - text: Landing
+                  - link "Tries":
+                    - /url: /dags/ingest_batch/tries
+                    - generic [ref=e178] [cursor=pointer]: repeat
+                    - text: Tries
+                  - link "Duration":
+                    - /url: /dags/ingest_batch/duration
+                    - generic [ref=e179] [cursor=pointer]: hourglass_bottom
+                    - text: Duration
+                  - link "Calendar":
+                    - /url: /dags/ingest_batch/calendar
+                    - generic [ref=e180] [cursor=pointer]: event
+                    - text: Calendar
+                  - link "Graph":
+                    - /url: /dags/ingest_batch/graph
+                    - generic [ref=e181] [cursor=pointer]: account_tree
+                    - text: Graph
+                  - link "Grid":
+                    - /url: /dags/ingest_batch/grid?num_runs=25
+                    - generic [ref=e182] [cursor=pointer]: grid_on
+                    - text: Grid
+                - generic [ref=e184]: more_horiz
+          - row "train_churn churn ml airflow 0:30:00 2026-04-09, 01:30:00 Trigger DAG Delete DAG Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e185]:
+            - cell [ref=e186]:
+              - checkbox [ref=e188]
+            - cell "train_churn churn ml" [ref=e190]:
+              - link "train_churn" [ref=e191] [cursor=pointer]:
+                - /url: /dags/train_churn/grid
+                - strong [ref=e192]: train_churn
+              - generic [ref=e193]:
+                - link "churn" [ref=e194] [cursor=pointer]:
+                  - /url: "?tags=churn"
+                - link "ml" [ref=e195] [cursor=pointer]:
+                  - /url: "?tags=ml"
+            - cell "airflow" [ref=e196]:
+              - link "airflow" [ref=e197] [cursor=pointer]:
+                - /url: "?search=airflow"
+            - cell [ref=e198]:
+              - img [ref=e199]:
+                - link "queued" [ref=e201] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_churn&_flt_3_state=queued
+                  - generic "queued" [ref=e202]
+                - link "success" [ref=e204] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_churn&_flt_3_state=success
+                  - generic "success" [ref=e205]
+                - link "running" [ref=e207] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_churn&_flt_3_state=running
+                  - generic "running" [ref=e208]
+                - link "failed" [ref=e210] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_churn&_flt_3_state=failed
+                  - generic "failed" [ref=e211]
+            - cell "0:30:00" [ref=e212]:
+              - link "0:30:00" [ref=e213] [cursor=pointer]:
+                - /url: /dagrun/list/?_flt_3_dag_id=train_churn
+            - cell [ref=e214]
+            - cell "2026-04-09, 01:30:00" [ref=e215]:
+              - time [ref=e216]: 2026-04-09, 01:30:00
+              - generic [ref=e217]: info
+            - cell [ref=e218]:
+              - img [ref=e219]:
+                - link "none" [ref=e221] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_8_state=
+                  - generic "none" [ref=e222]
+                - link "removed" [ref=e224] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=removed
+                  - generic "removed" [ref=e225]
+                - link "scheduled" [ref=e227] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=scheduled
+                  - generic "scheduled" [ref=e228]
+                - link "queued" [ref=e230] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=queued
+                  - generic "queued" [ref=e231]
+                - link "running" [ref=e233] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=running
+                  - generic "running" [ref=e234]
+                - link "success" [ref=e236] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=success
+                  - generic "success" [ref=e237]
+                - link "restarting" [ref=e239] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=restarting
+                  - generic "restarting" [ref=e240]
+                - link "failed" [ref=e242] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=failed
+                  - generic "failed" [ref=e243]
+                - link "up_for_retry" [ref=e245] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=up_for_retry
+                  - generic "up_for_retry" [ref=e246]
+                - link "up_for_reschedule" [ref=e248] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=up_for_reschedule
+                  - generic "up_for_reschedule" [ref=e249]
+                - link "upstream_failed" [ref=e251] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=upstream_failed
+                  - generic "upstream_failed" [ref=e252]
+                - link "skipped" [ref=e254] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=skipped
+                  - generic "skipped" [ref=e255]
+                - link "deferred" [ref=e257] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=deferred
+                  - generic "deferred" [ref=e258]
+                - link "shutdown" [ref=e260] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_churn&_flt_3_state=shutdown
+                  - generic "shutdown" [ref=e261]
+            - cell "Trigger DAG Delete DAG" [ref=e262]:
+              - generic [ref=e263]:
+                - link "Trigger DAG" [ref=e264] [cursor=pointer]:
+                  - /url: /dags/train_churn/trigger?redirect_url=%2Fhome
+                  - generic [ref=e265]: play_arrow
+                - link "Delete DAG" [ref=e266] [cursor=pointer]:
+                  - /url: /delete?dag_id=train_churn&redirect_url=%2Fhome
+                  - generic [ref=e267]: delete_outline
+            - cell "Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e268]:
+              - generic [ref=e269]:
+                - generic:
+                  - link "Code":
+                    - /url: /dags/train_churn/code
+                    - generic [ref=e270] [cursor=pointer]: code
+                    - text: Code
+                  - link "Gantt":
+                    - /url: /dags/train_churn/gantt
+                    - generic [ref=e271] [cursor=pointer]: vertical_distribute
+                    - text: Gantt
+                  - link "Landing":
+                    - /url: /dags/train_churn/landing-times
+                    - generic [ref=e272] [cursor=pointer]: flight_land
+                    - text: Landing
+                  - link "Tries":
+                    - /url: /dags/train_churn/tries
+                    - generic [ref=e273] [cursor=pointer]: repeat
+                    - text: Tries
+                  - link "Duration":
+                    - /url: /dags/train_churn/duration
+                    - generic [ref=e274] [cursor=pointer]: hourglass_bottom
+                    - text: Duration
+                  - link "Calendar":
+                    - /url: /dags/train_churn/calendar
+                    - generic [ref=e275] [cursor=pointer]: event
+                    - text: Calendar
+                  - link "Graph":
+                    - /url: /dags/train_churn/graph
+                    - generic [ref=e276] [cursor=pointer]: account_tree
+                    - text: Graph
+                  - link "Grid":
+                    - /url: /dags/train_churn/grid?num_runs=25
+                    - generic [ref=e277] [cursor=pointer]: grid_on
+                    - text: Grid
+                - generic [ref=e279]: more_horiz
+          - row "train_recommend ml recommend airflow 0:30:00 2026-04-09, 01:30:00 Trigger DAG Delete DAG Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e280]:
+            - cell [ref=e281]:
+              - checkbox [ref=e283]
+            - cell "train_recommend ml recommend" [ref=e285]:
+              - link "train_recommend" [ref=e286] [cursor=pointer]:
+                - /url: /dags/train_recommend/grid
+                - strong [ref=e287]: train_recommend
+              - generic [ref=e288]:
+                - link "ml" [ref=e289] [cursor=pointer]:
+                  - /url: "?tags=ml"
+                - link "recommend" [ref=e290] [cursor=pointer]:
+                  - /url: "?tags=recommend"
+            - cell "airflow" [ref=e291]:
+              - link "airflow" [ref=e292] [cursor=pointer]:
+                - /url: "?search=airflow"
+            - cell [ref=e293]:
+              - img [ref=e294]:
+                - link "queued" [ref=e296] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_recommend&_flt_3_state=queued
+                  - generic "queued" [ref=e297]
+                - link "success" [ref=e299] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_recommend&_flt_3_state=success
+                  - generic "success" [ref=e300]
+                - link "running" [ref=e302] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_recommend&_flt_3_state=running
+                  - generic "running" [ref=e303]
+                - link "failed" [ref=e305] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=train_recommend&_flt_3_state=failed
+                  - generic "failed" [ref=e306]
+            - cell "0:30:00" [ref=e307]:
+              - link "0:30:00" [ref=e308] [cursor=pointer]:
+                - /url: /dagrun/list/?_flt_3_dag_id=train_recommend
+            - cell [ref=e309]
+            - cell "2026-04-09, 01:30:00" [ref=e310]:
+              - time [ref=e311]: 2026-04-09, 01:30:00
+              - generic [ref=e312]: info
+            - cell [ref=e313]:
+              - img [ref=e314]:
+                - link "none" [ref=e316] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_8_state=
+                  - generic "none" [ref=e317]
+                - link "removed" [ref=e319] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=removed
+                  - generic "removed" [ref=e320]
+                - link "scheduled" [ref=e322] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=scheduled
+                  - generic "scheduled" [ref=e323]
+                - link "queued" [ref=e325] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=queued
+                  - generic "queued" [ref=e326]
+                - link "running" [ref=e328] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=running
+                  - generic "running" [ref=e329]
+                - link "success" [ref=e331] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=success
+                  - generic "success" [ref=e332]
+                - link "restarting" [ref=e334] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=restarting
+                  - generic "restarting" [ref=e335]
+                - link "failed" [ref=e337] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=failed
+                  - generic "failed" [ref=e338]
+                - link "up_for_retry" [ref=e340] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=up_for_retry
+                  - generic "up_for_retry" [ref=e341]
+                - link "up_for_reschedule" [ref=e343] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=up_for_reschedule
+                  - generic "up_for_reschedule" [ref=e344]
+                - link "upstream_failed" [ref=e346] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=upstream_failed
+                  - generic "upstream_failed" [ref=e347]
+                - link "skipped" [ref=e349] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=skipped
+                  - generic "skipped" [ref=e350]
+                - link "deferred" [ref=e352] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=deferred
+                  - generic "deferred" [ref=e353]
+                - link "shutdown" [ref=e355] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=train_recommend&_flt_3_state=shutdown
+                  - generic "shutdown" [ref=e356]
+            - cell "Trigger DAG Delete DAG" [ref=e357]:
+              - generic [ref=e358]:
+                - link "Trigger DAG" [ref=e359] [cursor=pointer]:
+                  - /url: /dags/train_recommend/trigger?redirect_url=%2Fhome
+                  - generic [ref=e360]: play_arrow
+                - link "Delete DAG" [ref=e361] [cursor=pointer]:
+                  - /url: /delete?dag_id=train_recommend&redirect_url=%2Fhome
+                  - generic [ref=e362]: delete_outline
+            - cell "Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e363]:
+              - generic [ref=e364]:
+                - generic:
+                  - link "Code":
+                    - /url: /dags/train_recommend/code
+                    - generic [ref=e365] [cursor=pointer]: code
+                    - text: Code
+                  - link "Gantt":
+                    - /url: /dags/train_recommend/gantt
+                    - generic [ref=e366] [cursor=pointer]: vertical_distribute
+                    - text: Gantt
+                  - link "Landing":
+                    - /url: /dags/train_recommend/landing-times
+                    - generic [ref=e367] [cursor=pointer]: flight_land
+                    - text: Landing
+                  - link "Tries":
+                    - /url: /dags/train_recommend/tries
+                    - generic [ref=e368] [cursor=pointer]: repeat
+                    - text: Tries
+                  - link "Duration":
+                    - /url: /dags/train_recommend/duration
+                    - generic [ref=e369] [cursor=pointer]: hourglass_bottom
+                    - text: Duration
+                  - link "Calendar":
+                    - /url: /dags/train_recommend/calendar
+                    - generic [ref=e370] [cursor=pointer]: event
+                    - text: Calendar
+                  - link "Graph":
+                    - /url: /dags/train_recommend/graph
+                    - generic [ref=e371] [cursor=pointer]: account_tree
+                    - text: Graph
+                  - link "Grid":
+                    - /url: /dags/train_recommend/grid?num_runs=25
+                    - generic [ref=e372] [cursor=pointer]: grid_on
+                    - text: Grid
+                - generic [ref=e374]: more_horiz
+          - row "transform dbt transform airflow None 2026-04-09, 01:27:08 Trigger DAG Delete DAG Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e375]:
+            - cell [ref=e376]:
+              - checkbox [checked] [ref=e378]
+            - cell "transform dbt transform" [ref=e380]:
+              - link "transform" [ref=e381] [cursor=pointer]:
+                - /url: /dags/transform/grid
+                - strong [ref=e382]: transform
+              - generic [ref=e383]:
+                - link "dbt" [ref=e384] [cursor=pointer]:
+                  - /url: "?tags=dbt"
+                - link "transform" [ref=e385] [cursor=pointer]:
+                  - /url: "?tags=transform"
+            - cell "airflow" [ref=e386]:
+              - link "airflow" [ref=e387] [cursor=pointer]:
+                - /url: "?search=airflow"
+            - cell [ref=e388]:
+              - img [ref=e389]:
+                - link "queued" [ref=e391] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=transform&_flt_3_state=queued
+                  - generic "queued" [ref=e392]
+                - generic [ref=e393]:
+                  - link "success" [ref=e394] [cursor=pointer]:
+                    - /url: /dagrun/list/?_flt_3_dag_id=transform&_flt_3_state=success
+                    - generic "success" [ref=e395]
+                  - generic: "2"
+                - link "running" [ref=e397] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=transform&_flt_3_state=running
+                  - generic "running" [ref=e398]
+                - link "failed" [ref=e400] [cursor=pointer]:
+                  - /url: /dagrun/list/?_flt_3_dag_id=transform&_flt_3_state=failed
+                  - generic "failed" [ref=e401]
+            - cell "None" [ref=e402]:
+              - link "None" [ref=e403] [cursor=pointer]:
+                - /url: /dagrun/list/?_flt_3_dag_id=transform
+              - generic [ref=e404]: info
+            - cell "2026-04-09, 01:27:08" [ref=e405]:
+              - link "2026-04-09, 01:27:08" [ref=e406] [cursor=pointer]:
+                - /url: /graph?dag_id=transform&execution_date=2026-04-09T01%3A27%3A08.719070%2B00%3A00
+                - time [ref=e407]: 2026-04-09, 01:27:08
+              - generic [ref=e408]: info
+            - cell [ref=e409]
+            - cell [ref=e410]:
+              - img [ref=e411]:
+                - link "none" [ref=e413] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_8_state=
+                  - generic "none" [ref=e414]
+                - link "removed" [ref=e416] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=removed
+                  - generic "removed" [ref=e417]
+                - link "scheduled" [ref=e419] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=scheduled
+                  - generic "scheduled" [ref=e420]
+                - link "queued" [ref=e422] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=queued
+                  - generic "queued" [ref=e423]
+                - link "running" [ref=e425] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=running
+                  - generic "running" [ref=e426]
+                - generic [ref=e427]:
+                  - link "success" [ref=e428] [cursor=pointer]:
+                    - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=success
+                    - generic "success" [ref=e429]
+                  - generic: "2"
+                - link "restarting" [ref=e431] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=restarting
+                  - generic "restarting" [ref=e432]
+                - link "failed" [ref=e434] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=failed
+                  - generic "failed" [ref=e435]
+                - link "up_for_retry" [ref=e437] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=up_for_retry
+                  - generic "up_for_retry" [ref=e438]
+                - link "up_for_reschedule" [ref=e440] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=up_for_reschedule
+                  - generic "up_for_reschedule" [ref=e441]
+                - link "upstream_failed" [ref=e443] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=upstream_failed
+                  - generic "upstream_failed" [ref=e444]
+                - link "skipped" [ref=e446] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=skipped
+                  - generic "skipped" [ref=e447]
+                - link "deferred" [ref=e449] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=deferred
+                  - generic "deferred" [ref=e450]
+                - link "shutdown" [ref=e452] [cursor=pointer]:
+                  - /url: /taskinstance/list/?_flt_3_dag_id=transform&_flt_3_state=shutdown
+                  - generic "shutdown" [ref=e453]
+            - cell "Trigger DAG Delete DAG" [ref=e454]:
+              - generic [ref=e455]:
+                - link "Trigger DAG" [ref=e456] [cursor=pointer]:
+                  - /url: /dags/transform/trigger?redirect_url=%2Fhome
+                  - generic [ref=e457]: play_arrow
+                - link "Delete DAG" [ref=e458] [cursor=pointer]:
+                  - /url: /delete?dag_id=transform&redirect_url=%2Fhome
+                  - generic [ref=e459]: delete_outline
+            - cell "Code Gantt Landing Tries Duration Calendar Graph Grid more_horiz" [ref=e460]:
+              - generic [ref=e461]:
+                - generic:
+                  - link "Code":
+                    - /url: /dags/transform/code
+                    - generic [ref=e462] [cursor=pointer]: code
+                    - text: Code
+                  - link "Gantt":
+                    - /url: /dags/transform/gantt
+                    - generic [ref=e463] [cursor=pointer]: vertical_distribute
+                    - text: Gantt
+                  - link "Landing":
+                    - /url: /dags/transform/landing-times
+                    - generic [ref=e464] [cursor=pointer]: flight_land
+                    - text: Landing
+                  - link "Tries":
+                    - /url: /dags/transform/tries
+                    - generic [ref=e465] [cursor=pointer]: repeat
+                    - text: Tries
+                  - link "Duration":
+                    - /url: /dags/transform/duration
+                    - generic [ref=e466] [cursor=pointer]: hourglass_bottom
+                    - text: Duration
+                  - link "Calendar":
+                    - /url: /dags/transform/calendar
+                    - generic [ref=e467] [cursor=pointer]: event
+                    - text: Calendar
+                  - link "Graph":
+                    - /url: /dags/transform/graph
+                    - generic [ref=e468] [cursor=pointer]: account_tree
+                    - text: Graph
+                  - link "Grid":
+                    - /url: /dags/transform/grid?num_runs=25
+                    - generic [ref=e469] [cursor=pointer]: grid_on
+                    - text: Grid
+                - generic [ref=e471]: more_horiz
+      - generic [ref=e472]:
+        - list [ref=e474]:
+          - listitem:
+            - link "«" [ref=e475]:
+              - /url: javascript:void(0)
+          - listitem:
+            - link "‹" [ref=e476]:
+              - /url: javascript:void(0)
+          - listitem:
+            - link "1" [ref=e477]:
+              - /url: javascript:void(0)
+          - listitem:
+            - link "›" [ref=e478]:
+              - /url: javascript:void(0)
+          - listitem:
+            - link "»" [ref=e479]:
+              - /url: javascript:void(0)
+        - generic [ref=e480]:
+          - text: Showing
+          - strong [ref=e481]: 1-4
+          - text: of
+          - strong [ref=e482]: "4"
+          - text: DAGs
+    - generic:
+      - generic: failed
+  - contentinfo [ref=e483]:
+    - generic [ref=e485]:
+      - text: "Version:"
+      - link "v2.9.3" [ref=e486] [cursor=pointer]:
+        - /url: https://pypi.python.org/pypi/apache-airflow/2.9.3
+      - text: "Git Version:"
+      - strong [ref=e487]: .release:81845de9d95a733b4eb7826aaabe23ba9813eba3

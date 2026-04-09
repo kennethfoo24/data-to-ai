@@ -1,0 +1,25 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "MLflow" [ref=e6] [cursor=pointer]:
+        - /url: "#/"
+        - img "MLflow" [ref=e7]
+      - generic [ref=e8]: 2.12.2
+    - generic [ref=e9]:
+      - link "Experiments" [ref=e10] [cursor=pointer]:
+        - /url: "#/"
+        - generic [ref=e11]: Experiments
+      - link "Models" [ref=e12] [cursor=pointer]:
+        - /url: "#/models"
+        - generic [ref=e13]: Models
+    - generic [ref=e14]:
+      - generic [ref=e16]:
+        - switch [ref=e17] [cursor=pointer]
+        - img [ref=e19]
+      - link "GitHub" [ref=e21] [cursor=pointer]:
+        - /url: https://github.com/mlflow/mlflow
+        - generic [ref=e22]: GitHub
+      - link "Docs" [ref=e23] [cursor=pointer]:
+        - /url: https://www.mlflow.org/docs/latest/index.html
+        - generic [ref=e24]: Docs
+  - img "Page loading..." [ref=e262]

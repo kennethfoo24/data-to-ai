@@ -28,6 +28,11 @@ RUN pip install --no-cache-dir \
   "torch==2.2.2" \
   "mlflow==2.12.2"
 
+# Patch dbt-spark session.py: wrap PySpark AnalysisException as DbtRuntimeError so
+# the Iceberg v2 "SHOW TABLE EXTENDED not supported" fallback in impl.py is triggered.
+COPY patch_dbt_spark.py /tmp/patch_dbt_spark.py
+RUN python3 /tmp/patch_dbt_spark.py
+
 USER root
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

@@ -11,7 +11,7 @@ from pyspark.sql.types import (
 
 KAFKA_BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
 TOPIC = os.getenv("KAFKA_TOPIC_CLICKSTREAM", "shopstream.clickstream")
-WAREHOUSE = os.getenv("WAREHOUSE_PATH", "/warehouse")
+WAREHOUSE = os.getenv("WAREHOUSE_PATH") or os.getenv("SPARK_WAREHOUSE") or "/warehouse"
 
 EVENT_SCHEMA = StructType([
     StructField("event_id", StringType()),

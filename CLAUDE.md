@@ -104,13 +104,14 @@ Kafka ──────────► Spark Structured Streaming ──► Bro
 
 ## Development Status
 
-All 5 phases complete and verified end-to-end on 2026-04-08. `make setup` brings up 9 services, seeds 2K customers + 200 products, and triggers the full pipeline.
+All 6 phases complete and verified end-to-end. `make setup` brings up 9 services, seeds 2K customers + 200 products, and triggers the full pipeline.
 
 - **Phase 1** (Infrastructure): Complete
 - **Phase 2** (Data Pipeline — ingestion, Spark, dbt): Complete
 - **Phase 3** (ML — PyTorch, MLflow): Complete
 - **Phase 4** (Serving — FastAPI): Complete
 - **Phase 5** (UI — Next.js lineage dashboard): Complete
+- **Phase 6** (Iceberg Catalog Explorer): Complete
 
 ## Phase 2 — Completed (2026-04-08)
 
@@ -246,3 +247,31 @@ Fixes applied after initial Phase 5 to make the UI accurately reflect live data.
 ### Key constraint
 - **`orders` is not a Postgres table**: Orders data lives only in Iceberg (Bronze layer). Never query `orders` from Postgres in `/api/status` or anywhere else.
 - **fastapi image is baked, not volume-mounted**: Changes to `serving/` require `docker compose --profile core build fastapi && docker compose --profile core up -d fastapi`
+
+## Phase 6 — Completed (2026-04-09): Iceberg Catalog Explorer
+
+Clicking any Iceberg node (bronze/silver/gold) or dbt node opens a modal showing schema + 5 sample rows. dbt nodes show syntax-highlighted SQL. Full catalog page at `/catalog/[layer]/[table]`.
+
+| File | Purpose |
+|------|---------|
+| `serving/routers/catalog.py` | `GET /api/catalog/{layer}/{table}` — reads Iceberg Parquet via pyarrow, returns schema + 5 rows + row count |
+| `serving/routers/catalog.py` | `GET /api/catalog` — lists all layers/tables |
+| `ui/components/CatalogModal.tsx` | Modal with table tabs, schema/data toggle, SQL highlight for dbt nodes, GitHub + full-page links |
+| `ui/app/catalog/[layer]/[table]/page.tsx` | Full catalog page with sidebar listing all tables |
+| `ui/app/catalog/layout.tsx` | Layout wrapper for catalog pages |
+| `docker-compose.yml` | `warehouse` named volume mounted on `fastapi` container (`/warehouse`) |
+
+### Key notes
+- `catalog.py` reads Parquet directly via `pyarrow` — no Spark session needed at serving time
+- Iceberg Parquet path pattern: `/warehouse/{layer}/{table}/data/**/*.parquet`
+- Row count is summed from Parquet file metadata (fast, no full scan)
+- SQL sources are statically embedded in `CatalogModal.tsx` (no dbt API needed)
+- GitHub links point to `https://github.com/kennethfoo24/data-to-ai/blob/main/dbt/models/{layer}/{model}.sql`
+- `pyarrow` is already in `serving/requirements.txt` — no new deps needed
+- Rebuild fastapi: `docker compose --profile core build fastapi && docker compose --profile core up -d fastapi`
+- Rebuild UI: `docker compose --profile core build ui && docker compose --profile core up -d ui`
+
+### Key lessons learned
+- **`pyarrow` conflicts with `mlflow<2.14`**: `pyarrow>=17` required by pyiceberg breaks mlflow. Use `pyarrow` without version pin in `serving/requirements.txt` — mlflow 2.12.2 works fine with pyarrow in the serving container (not the Airflow container).
+- **Non-JSON-safe types**: Parquet columns like `date32`, `decimal128`, timestamps must be cast to string before returning as JSON. Handle `math.isnan` for float NaN → None.
+- **`warehouse` volume on fastapi**: Must add `- warehouse:/warehouse` to fastapi volumes in `docker-compose.yml` and declare `warehouse:` in top-level `volumes:`.

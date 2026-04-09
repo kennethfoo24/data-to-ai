@@ -132,6 +132,17 @@ body::before {
 .react-flow__handle-right { right: -4px !important; }
 .react-flow__handle-left  { left:  -4px !important; }
 
+/* ── Modal keyframes ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ── Keyframes ── */
 
 /* Node stagger entrance — translateY not scale(0), combined with opacity */

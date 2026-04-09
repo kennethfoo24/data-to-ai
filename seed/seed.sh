@@ -1,19 +1,25 @@
 #!/bin/bash
 set -e
 
+# Load .env from repo root so POSTGRES_USER etc. are available when run directly
+SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+[ -f "${SCRIPT_DIR}/.env" ] && export $(grep -v '^#' "${SCRIPT_DIR}/.env" | xargs)
+PGUSER=${POSTGRES_USER:-admin}
+PGDB=${POSTGRES_DB:-shopstream}
+
 echo "==> [1/4] Generating seed CSVs..."
 python3 seed/generate_data.py
 
 echo "==> [2/4] Loading customers + inventory into Postgres..."
-docker compose exec postgres psql -U postgres -d shopstream \
+docker compose exec postgres psql -U "$PGUSER" -d "$PGDB" \
   -c "TRUNCATE customers RESTART IDENTITY CASCADE;"
-docker compose exec postgres psql -U postgres -d shopstream \
+docker compose exec postgres psql -U "$PGUSER" -d "$PGDB" \
   -c "COPY customers(customer_id,name,email,city,country,signup_date,age,loyalty_tier) FROM '/seed/customers.csv' CSV HEADER"
-docker compose exec postgres psql -U postgres -d shopstream \
+docker compose exec postgres psql -U "$PGUSER" -d "$PGDB" \
   -c "SELECT setval(pg_get_serial_sequence('customers','customer_id'), MAX(customer_id)) FROM customers;"
-docker compose exec postgres psql -U postgres -d shopstream \
+docker compose exec postgres psql -U "$PGUSER" -d "$PGDB" \
   -c "TRUNCATE inventory;"
-docker compose exec postgres psql -U postgres -d shopstream -c "
+docker compose exec postgres psql -U "$PGUSER" -d "$PGDB" -c "
   CREATE TEMP TABLE products_import(product_id int, name text, category text, price numeric, cost_price numeric, stock_qty int);
   COPY products_import FROM '/seed/products.csv' CSV HEADER;
   INSERT INTO inventory(product_id, stock_qty) SELECT product_id, stock_qty FROM products_import;
@@ -31,18 +37,52 @@ until curl -s http://localhost:8082/health | grep -q '"status": "healthy"'; do
   sleep 5
 done
 
-curl -s -X POST http://localhost:8082/api/v1/dags/ingest_batch/dagRuns \
+# Unpause DAGs first — new Airflow installs start all DAGs paused
+curl -s -X PATCH http://localhost:8082/api/v1/dags/ingest_batch \
   -H "Content-Type: application/json" \
   -u "admin:admin" \
-  -d '{"conf": {}}' | grep -q "running\|queued" && echo "   ingest_batch triggered ✓" || echo "   ingest_batch trigger failed"
+  -d '{"is_paused": false}' > /dev/null && echo "   ingest_batch unpaused ✓"
+curl -s -X PATCH http://localhost:8082/api/v1/dags/transform \
+  -H "Content-Type: application/json" \
+  -u "admin:admin" \
+  -d '{"is_paused": false}' > /dev/null && echo "   transform unpaused ✓"
 
-echo "   Waiting 60s for Bronze ingestion to complete..."
-sleep 60
+# Trigger ingest_batch and capture the run_id
+INGEST_RUN=$(curl -s -X POST http://localhost:8082/api/v1/dags/ingest_batch/dagRuns \
+  -H "Content-Type: application/json" \
+  -u "admin:admin" \
+  -d '{"conf": {}}')
+echo "$INGEST_RUN" | grep -q "run_id" && echo "   ingest_batch triggered ✓" || { echo "   ingest_batch trigger failed"; echo "$INGEST_RUN"; exit 1; }
+INGEST_RUN_ID=$(echo "$INGEST_RUN" | python3 -c "import sys,json; print(json.load(sys.stdin)['dag_run_id'])")
 
+# Wait for ingest_batch to complete (up to 10 min)
+echo "   Waiting for ingest_batch to complete..."
+WAIT=0
+while [ $WAIT -lt 600 ]; do
+  STATE=$(curl -s http://localhost:8082/api/v1/dags/ingest_batch/dagRuns/"$INGEST_RUN_ID" \
+    -u "admin:admin" | python3 -c "import sys,json; print(json.load(sys.stdin).get('state','unknown'))" 2>/dev/null)
+  if [ "$STATE" = "success" ]; then
+    echo "   ingest_batch complete ✓"
+    break
+  elif [ "$STATE" = "failed" ]; then
+    echo "   ERROR: ingest_batch failed. Check Airflow at http://localhost:8082"
+    exit 1
+  fi
+  printf "   [%ds] state=%s, waiting...\n" "$WAIT" "$STATE"
+  sleep 15
+  WAIT=$((WAIT + 15))
+done
+if [ $WAIT -ge 600 ]; then
+  echo "   WARNING: ingest_batch did not complete within 10 min — triggering transform anyway"
+fi
+
+# Trigger transform
 curl -s -X POST http://localhost:8082/api/v1/dags/transform/dagRuns \
   -H "Content-Type: application/json" \
   -u "admin:admin" \
-  -d '{"conf": {}}' | grep -q "running\|queued" && echo "   transform triggered ✓" || echo "   transform trigger failed"
+  -d '{"conf": {}}' | grep -q "run_id" && echo "   transform triggered ✓" || echo "   transform trigger failed"
+
+echo "   transform is running — Silver/Gold tables will be ready in ~2-3 min."
 
 echo ""
 echo "ShopStream seed complete."
